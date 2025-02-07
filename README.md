@@ -53,11 +53,11 @@ llama-stack-client \
 ```
 expect to see llm's outputs
 
-### next try run the inference example in quick start example.
+### 4. Run the inference example in quick start example.
 I slightly modified it with .env file added.
 simplely run `python example_python_sdk.py` you will see llama's text output about coding haiku
 
-### next try run the first RAG agent example
+### 5. Run the first RAG agent example
 same, run `python example_rag.py` 
 you will see model output about they searched the rag file and give summary about it.
 
