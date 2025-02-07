@@ -1,4 +1,4 @@
-# This is a attempt to llama-stack quick start
+# This is my attempt to llama-stack quick start
 please follow more detail by "https://llama-stack.readthedocs.io/en/latest/getting_started/index.html"
 
 ## Prerequisite
