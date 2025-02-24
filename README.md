@@ -17,7 +17,7 @@ mkdir -p ~/.llama
 ``````
 then start server by run
 ```
-podman run -it \
+podman run --privileged -it \
   -p $LLAMA_STACK_PORT:$LLAMA_STACK_PORT \
   -v ~/.llama:/root/.llama \
   llamastack/distribution-ollama \
@@ -32,6 +32,7 @@ yes | conda create -n stack-client python=3.10
 conda activate stack-client
 
 pip install llama-stack-client
+pip install python-dotenv
 ```
 next testing if it is configed properly
 ```
@@ -61,3 +62,17 @@ simplely run `python example_python_sdk.py` you will see llama's text output abo
 same, run `python example_rag.py` 
 you will see model output about they searched the rag file and give summary about it.
 
+## **9. Run a build in web search Agent**
+
+If you wish to test around the web search tool with external web search API, you can follow the example in `tool_websearch.py`. This example modified based on exsiting web search tool from https://colab.research.google.com/github/meta-llama/llama-stack/blob/main/docs/getting_started.ipynb. Allow run it through podman follow same instruction.
+
+Run the script:
+
+```bash
+python tool_websearch.py
+```
+
+
+cd /opt/anaconda3/envs/stack-client/lib/python3.10/site-packages/llama_stack_client/lib/agents
+
+Using template ollama config file: /usr/local/lib/python3.10/site-packages/llama_stack/templates/ollama/run.yaml

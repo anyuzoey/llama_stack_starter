@@ -64,7 +64,8 @@ async def run_main():
     tool_choice="auto",
     # note: the below works for llama-3.1-8B model, but if you plan to use the
     # llama-3.2-3B model, you will need to change it to tool_prompt_format="python_list"
-    tool_prompt_format="json",
+    # tool_prompt_format="json",
+    tool_prompt_format="python_list",
     )
     logger.debug(f"Agent config: {agent_config}")
 

@@ -1,6 +1,6 @@
 
 from llama_stack_client import LlamaStackClient
-from llama_stack_client.lib.agents.client_tool import ClientTool
+from llama_stack_client.lib.agents.client_tool import client_tool
 from llama_stack_client.lib.agents.event_logger import EventLogger
 from llama_stack_client.lib.agents.agent import Agent
 from llama_stack_client.types.agent_create_params import AgentConfig
@@ -8,7 +8,7 @@ from llama_stack_client.types.agent_create_params import AgentConfig
 
 client = LlamaStackClient(base_url="http://localhost:8321")
 
-@ClientTool
+@client_tool
 def torchtune(query: str = "torchtune"):
     """
     Answer information about torchtune.

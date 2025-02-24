@@ -27,18 +27,7 @@ def create_http_client():
         base_url=f"http://localhost:{llama_stack_port}" # return LlamaStackClient(base_url="http://localhost:8321", timeout = 6000)
     )
 
-
-def create_library_client(template="ollama"):
-    from llama_stack import LlamaStackAsLibraryClient
-
-    client = LlamaStackAsLibraryClient(template)
-    client.initialize()
-    return client
-
-
-client = (
-    create_http_client()
-)  # or create_http_client() depending on the environment you picked
+client = create_http_client()  # or create_http_client() depending on the environment you picked
 
 # Documents to be used for RAG
 urls = ["chat.rst", "llama3.rst", "memory_optimizations.rst", "lora_finetune.rst"]
@@ -54,7 +43,9 @@ documents = [
 
 # Register a vector database
 vector_db_id = "test-vector-db"
+VECTOR_DB_PROVIDER = "faiss"
 client.vector_dbs.register(
+    provider_id=VECTOR_DB_PROVIDER,
     vector_db_id=vector_db_id,
     embedding_model="all-MiniLM-L6-v2",
     embedding_dimension=384,
