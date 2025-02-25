@@ -34,6 +34,8 @@ conda activate stack-client
 pip install llama-stack-client
 pip install python-dotenv
 ```
+> **_NOTE:_** code should work with 0.1.4 and 0.1.3. You can check current version by `pip show llama_stack_client`. use `pip install --upgrade llama_stack_client` to update to latest version. git repo for this is > https://github.com/meta-llama/llama-stack-client-python
+
 next testing if it is configed properly
 ```
 llama-stack-client configure --endpoint http://localhost:$LLAMA_STACK_PORT
@@ -56,7 +58,7 @@ expect to see llm's outputs
 
 ### 4. Run the inference example in quick start example.
 I slightly modified it with .env file added.
-simplely run `python example_python_sdk.py` you will see llama's text output about coding haiku
+simplely run `¸` you will see llama's text output about coding haiku
 
 ### 5. Run the first RAG agent example
 same, run `python example_rag.py` 
