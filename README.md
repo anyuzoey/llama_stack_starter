@@ -62,17 +62,6 @@ simplely run `python example_python_sdk.py` you will see llama's text output abo
 same, run `python example_rag.py` 
 you will see model output about they searched the rag file and give summary about it.
 
-## **9. Run a build in web search Agent**
-
-If you wish to test around the web search tool with external web search API, you can follow the example in `tool_websearch.py`. This example modified based on exsiting web search tool from https://colab.research.google.com/github/meta-llama/llama-stack/blob/main/docs/getting_started.ipynb. Allow run it through podman follow same instruction.
-
+### 6. Run other agent examples
 Run the script:
-
-```bash
-python tool_websearch.py
-```
-
-
-cd /opt/anaconda3/envs/stack-client/lib/python3.10/site-packages/llama_stack_client/lib/agents
-
-Using template ollama config file: /usr/local/lib/python3.10/site-packages/llama_stack/templates/ollama/run.yaml
+`python tool_websearch.py`
