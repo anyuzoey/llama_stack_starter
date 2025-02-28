@@ -50,7 +50,7 @@ agent_config = AgentConfig(
         "name the tool called."
     ),
     toolgroups=["builtin::websearch"],
-    provider_id="tavily-search",
+    # provider_id="tavily-search",
     input_shields=[],
     output_shields=[],
     enable_session_persistence=False,
