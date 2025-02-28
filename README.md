@@ -22,9 +22,11 @@ podman run --privileged -it \
   -v ~/.llama:/root/.llama \
   llamastack/distribution-ollama \
   --port $LLAMA_STACK_PORT \
-  --env INFERENCE_MODEL=$INFERENCE_MODEL \
+  --env INFERENCE_MODEL=$INFERENCE_MODEL \  
   --env OLLAMA_URL=http://host.docker.internal:11434
 ```
+> **_NOTE:_** can provide api key here in podman run --env TAVILY_SEARCH_API_KEY=$TAVILY_SEARCH_API_KEY, by adding this line,  line 27 in tool_websearch_clean.py dont need specify provider_data = {"tavily_search_api_key": tavily_search_api_key} 
+
 ### 3. installing the llama stack client cli and sdk
 run following
 ```
