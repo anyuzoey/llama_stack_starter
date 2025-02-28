@@ -30,14 +30,6 @@ def create_http_client():
 # Initialize the Llama Stack client, choosing between library or HTTP client
 client = create_http_client()  
 
-# # Register Search tool group
-# # according to https://llama-stack.readthedocs.io/en/latest/building_applications/tools.html
-# client.toolgroups.register( 
-#     toolgroup_id="builtin::websearch",
-#     provider_id="tavily-search",
-#     args={"max_results": 5},
-# )
-
 print(client.toolgroups.list())
 
 # Below is modified from websearch example from https://colab.research.google.com/github/meta-llama/llama-stack/blob/main/docs/getting_started.ipynb
@@ -50,7 +42,6 @@ agent_config = AgentConfig(
         "name the tool called."
     ),
     toolgroups=["builtin::websearch"],
-    # provider_id="tavily-search",
     input_shields=[],
     output_shields=[],
     enable_session_persistence=False,
