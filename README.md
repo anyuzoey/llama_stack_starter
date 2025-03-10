@@ -18,12 +18,12 @@ mkdir -p ~/.llama
 then start server by run
 ```
 podman run --privileged -it \
-  -p $LLAMA_STACK_PORT:$LLAMA_STACK_PORT \
+  -p ${LLAMA_STACK_PORT}:${LLAMA_STACK_PORT} \
   -v ~/.llama:/root/.llama \
+  --env INFERENCE_MODEL=${INFERENCE_MODEL} \
+  --env OLLAMA_URL=http://host.docker.internal:11434 \
   llamastack/distribution-ollama \
-  --port $LLAMA_STACK_PORT \
-  --env INFERENCE_MODEL=$INFERENCE_MODEL \  
-  --env OLLAMA_URL=http://host.docker.internal:11434
+  --port ${LLAMA_STACK_PORT}
 ```
 > **_NOTE:_** can provide api key here in podman run --env TAVILY_SEARCH_API_KEY=$TAVILY_SEARCH_API_KEY, by adding this line,  line 27 in tool_websearch_clean.py dont need specify provider_data = {"tavily_search_api_key": tavily_search_api_key} 
 
