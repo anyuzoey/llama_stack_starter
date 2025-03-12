@@ -9,6 +9,18 @@ from dotenv import load_dotenv
 # Load .env file
 load_dotenv()
 
+# this script is tested for llama-stack version 0.1.6
+"""
+How to run:
+step 1. ollama run llama3.2:3b-instruct-fp16 --keepalive 60m
+step 2. export INFERENCE_MODEL="meta-llama/Llama-3.2-3B-Instruct"
+step 3. export LLAMA_STACK_PORT=8321
+step 4. llama stack run --image-type conda ~/llama-stack/llama_stack/templates/ollama/run.yaml
+    (I'm using conda env, follow this if not using conda, https://llama-stack.readthedocs.io/en/latest/distributions/building_distro.html)
+step 5. run the example script
+"""
+
+
 # Access the environment variables
 inference_model = os.getenv("INFERENCE_MODEL")
 llama_stack_port = os.getenv("LLAMA_STACK_PORT")
@@ -19,9 +31,11 @@ wolfram_api_key=os.environ["WOLFRAM_ALPHA_API_KEY"]
 
 # Initialize the Llama Stack client, choosing between library or HTTP client
 client = LlamaStackClient(
+        # base_url="http://llamastack-deployment-llama-serve.apps.ocp-beta-test.nerc.mghpcc.org:80",
         base_url=f"http://localhost:{llama_stack_port}", # return LlamaStackClient(base_url="http://localhost:8321", timeout = 6000)
-        provider_data = {"tavily_search_api_key": tavily_search_api_key,
-                         "wolfram_alpha_api_key": wolfram_api_key}  # according to https://llama-stack.readthedocs.io/en/latest/building_applications/tools.html
+        provider_data = {
+            "tavily_search_api_key": tavily_search_api_key,
+            "wolfram_alpha_api_key": wolfram_api_key}  # according to https://llama-stack.readthedocs.io/en/latest/building_applications/tools.html
     )  
 
 print(client.toolgroups.list())
@@ -36,9 +50,12 @@ agent = Agent(
     Select the best tool for each query and execute this query for accurate answer. 
     If there is a error, try another suitable tool.
     """,
-    tools=["builtin::websearch",
-           "builtin::code_interpreter",
-           "builtin::wolfram_alpha"],)
+    tools=[
+        "builtin::websearch",
+        "builtin::wolfram_alpha",
+        "builtin::code_interpreter",
+        ],
+)
 user_prompts = [
     "Hello",
     "Tell me 10 densest elemental metals",
