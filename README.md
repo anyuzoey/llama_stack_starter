@@ -30,6 +30,8 @@ podman run --privileged -it \
 or run
 `llama stack run --image-type conda ~/vscode/llama-stack/llama_stack/templates/ollama/run.yaml`
 
+> **_NOTE:_** check this for latest ollama distribution https://hub.docker.com/r/llamastack/distribution-ollama
+
 ### 3. installing the llama stack client cli and sdk
 run following
 ```

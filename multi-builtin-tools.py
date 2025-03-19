@@ -1,6 +1,5 @@
 from llama_stack_client.lib.agents.agent import Agent
 from llama_stack_client.lib.agents.event_logger import EventLogger
-from llama_stack_client.types.agent_create_params import AgentConfig
 from termcolor import cprint
 import os
 from llama_stack_client import LlamaStackClient
@@ -20,22 +19,19 @@ step 4. llama stack run --image-type conda ~/llama-stack/llama_stack/templates/o
 step 5. run the example script
 """
 
-
 # Access the environment variables
 inference_model = os.getenv("INFERENCE_MODEL")
-llama_stack_port = os.getenv("LLAMA_STACK_PORT")
-ollama_url = os.getenv("OLLAMA_URL")
-tavily_search_api_key = os.environ["TAVILY_SEARCH_API_KEY"]
-wolfram_api_key=os.environ["WOLFRAM_ALPHA_API_KEY"]
+tavily_search_api_key = os.getenv("TAVILY_SEARCH_API_KEY")
+wolfram_api_key=os.getenv("WOLFRAM_ALPHA_API_KEY")
+endpoint = os.getenv("LLAMA_STACK_ENDPOINT")
+port = os.getenv("LLAMA_STACK_PORT")
+base_url = endpoint if endpoint else f"http://localhost:{port}"
+print(f"Model: {inference_model}")
 
-
-# Initialize the Llama Stack client, choosing between library or HTTP client
 client = LlamaStackClient(
-        # base_url="http://llamastack-deployment-llama-serve.apps.ocp-beta-test.nerc.mghpcc.org:80",
-        base_url=f"http://localhost:{llama_stack_port}", # return LlamaStackClient(base_url="http://localhost:8321", timeout = 6000)
-        provider_data = {
-            "tavily_search_api_key": tavily_search_api_key,
-            "wolfram_alpha_api_key": wolfram_api_key}  # according to https://llama-stack.readthedocs.io/en/latest/building_applications/tools.html
+        base_url=base_url,
+        provider_data = {"tavily_search_api_key": tavily_search_api_key,
+                         "wolfram_alpha_api_key": wolfram_api_key} 
     )  
 
 print(client.toolgroups.list())
@@ -50,12 +46,9 @@ agent = Agent(
     Select the best tool for each query and execute this query for accurate answer. 
     If there is a error, try another suitable tool.
     """,
-    tools=[
-        "builtin::websearch",
-        "builtin::wolfram_alpha",
-        "builtin::code_interpreter",
-        ],
-)
+    tools=["builtin::websearch",
+           "builtin::code_interpreter",
+           "builtin::wolfram_alpha"],)
 user_prompts = [
     "Hello",
     "Tell me 10 densest elemental metals",
