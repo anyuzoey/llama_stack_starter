@@ -1,21 +1,20 @@
 from llama_stack_client.lib.agents.agent import Agent
 from llama_stack_client.lib.agents.event_logger import EventLogger
-from termcolor import cprint
-import os
 from llama_stack_client import LlamaStackClient
+from termcolor import cprint
 from dotenv import load_dotenv
-
+import os
 load_dotenv()
 
 inference_model = os.getenv("INFERENCE_MODEL")
 wolfram_api_key=os.getenv("WOLFRAM_ALPHA_API_KEY")
 endpoint = os.getenv("LLAMA_STACK_ENDPOINT")
 port = os.getenv("LLAMA_STACK_PORT")
-base_url = endpoint if endpoint else f"http://localhost:{port}"
+environment = "local" # "nerc" or "local"
 print(f"Model: {inference_model}")
 
 client =  LlamaStackClient(
-        base_url=base_url,
+        base_url=f"http://localhost:{port}" if environment=="local" else endpoint,
         provider_data = {"wolfram_alpha_api_key": wolfram_api_key}
 )
 

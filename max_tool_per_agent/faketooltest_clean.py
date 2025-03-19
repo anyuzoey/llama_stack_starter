@@ -111,13 +111,6 @@ def generate_fake_tools(n):
                 f"Tool {tool_id} processed input: {input_data}",
                 f"Tool {tool_id} received: {input_data}",
                 f"Input {input_data} was handled by tool {tool_id}",
-                f"Tool {tool_id} says: {input_data} is processed",
-                f"Processing complete for {input_data} by tool {tool_id}",
-                f"Tool {tool_id} has successfully processed: {input_data}",
-                f"Input {input_data} has been managed by tool {tool_id}",
-                f"Tool {tool_id} confirms processing of: {input_data}",
-                f"Tool {tool_id} completed handling: {input_data}",
-                f"Input {input_data} processed by tool {tool_id} successfully"
             ]
             return {"success": True, "result": random.choice(responses)}
         
@@ -147,8 +140,8 @@ queries = [
 def log_results(results, output_dir, inference_model, environment):
     """Logs experiment results into a CSV file and a log file."""
     # Define the filename for the CSV file
-    csv_filename = os.path.join(output_dir, f"experiment_results_{inference_model}_{environment}.csv")
-    # Write results to CSV file
+    experiment_date = time.strftime("%Y%m%d_%H%M%S")
+    csv_filename = os.path.join(output_dir, f"results_{inference_model}_{environment}_{experiment_date}.csv")
     with open(csv_filename, mode="w", newline="") as file:
         writer = csv.writer(file)
         writer.writerow(["Tool Count", "Exception Rate", "Tool Execution Rate", "Correct Tool Rate", "Average Latency (s)"])
@@ -159,38 +152,20 @@ async def run_main():
     model_id = "meta-llama/Llama-3.2-3B-Instruct"
     print(model_id)
     inference_model = model_id.split("/")[1]
-    environment = "nerc" # "nerc" or "local"
+    environment = "local" # "nerc" or "local"
 
     # Setup logging to a file and the console
     output_dir = "experiment_logs"
     os.makedirs(output_dir, exist_ok=True)
-    log_filename = os.path.join(output_dir, f"log_{inference_model}_{environment}.log")
-
-    logging.basicConfig(level=logging.INFO, format='%(message)s', handlers=[
-        logging.FileHandler(log_filename),
-        logging.StreamHandler()
-    ])
-    logger = logging.getLogger()
-
-    # Redirect print statements to the logger
-    class PrintLogger:
-        def write(self, message):
-            if message.strip():
-                logger.info(message.strip())
-        def flush(self):
-            pass
-
-    sys.stdout = PrintLogger()
-    sys.stderr = PrintLogger()
 
     client = LlamaStackClient(
-        base_url=f"http://localhost:{os.getenv('LLAMA_STACK_PORT')}" if environment == "local" else os.getenv("NERC_LINK")
+        base_url=f"http://localhost:{os.getenv('LLAMA_STACK_PORT')}" if environment == "local" else os.getenv("LLAMA_STACK_ENDPOINT")
     )
     
     real_tools = [weather_info, word_count, reverse_string, uppercase, insurance_scorer]
     results = []
 
-    for total_tools in range(5,100, 5):  # Increase by 5 up to 50 tools
+    for total_tools in range(5,10, 5):  # Increase by 5 up to 50 tools
         tools = real_tools  + generate_fake_tools(total_tools - len(real_tools))
         print(len(tools))
         
@@ -247,11 +222,11 @@ async def run_main():
                 print(f"Error processing query: {e}")
                 exception_count += 1
 
-            session_response = client.agents.session.retrieve(
-                session_id=session_id,
-                agent_id=agent.agent_id,
-            )
-            pprint(session_response)
+            # session_response = client.agents.session.retrieve(
+            #     session_id=session_id,
+            #     agent_id=agent.agent_id,
+            # )
+            # pprint(session_response)
 
         exception_rate = exception_count / len(queries)
         tool_execution_rate = tool_execution_count / len(queries)
