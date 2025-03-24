@@ -23,7 +23,7 @@ The core goal is to evaluate **how many tools a model can handle** before its to
   - Or, after exceeding a threshold, **fail to abstract and match** any tools, even among the first few.
 - Even when inference still returns a response, the selected tool may be incorrect or invalid.
 - **Local vs. cluster-hosted models** (e.g., on NERC) behave differently—even for identical 3B models—likely due to variations in runtime or configuration (e.g., token limit in VLLM's `run.yaml`).
-- (update 24 Mar), 3B model last week consistently give 24 max tool. but this week for v0.1.8, it give 11, 18, 23 max tool for 3 different run. suspect teperature related param were changed for 3B model. 8b model to be tested if it follow same change.
+- (update 24 Mar), 3B model last week consistently give 24 max tool. but this week for v0.1.8, it give 11, 18, 23 max tool for 3 different run. suspect temperature related param were changed for 3B model. 8b model to be tested if it follow same change.
 
 ## 📊 Sample Results
 
