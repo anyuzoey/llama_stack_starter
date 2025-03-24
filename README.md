@@ -8,6 +8,7 @@ Podman
 ## Steps
 ### 1. Start Ollama
 `ollama run llama3.2:3b-instruct-fp16 --keepalive 60m`
+or `ollama run llama3.1:8b-instruct-fp16 --keepalive 60m` 
 ### 2. Start up the Llama Stack server  
 open terminal write
 ``````
@@ -15,6 +16,13 @@ export INFERENCE_MODEL="meta-llama/Llama-3.2-3B-Instruct"
 export LLAMA_STACK_PORT=8321
 mkdir -p ~/.llama
 ``````
+or 
+```
+export INFERENCE_MODEL="meta-llama/Llama-3.1-8B-Instruct"                               
+export LLAMA_STACK_PORT=8321
+mkdir -p ~/.llama
+```
+
 pull the latest ollama distribution by run `podman pull docker.io/llamastack/distribution-ollama`
 
 then start server by run
@@ -27,7 +35,18 @@ podman run --privileged -it \
   llamastack/distribution-ollama \
   --port ${LLAMA_STACK_PORT}
 ```
-> **_NOTE:_** can provide api key here in podman run --env TAVILY_SEARCH_API_KEY=$TAVILY_SEARCH_API_KEY, by adding this line,  line 27 in tool_websearch_clean.py dont need specify provider_data = {"tavily_search_api_key": tavily_search_api_key} 
+> **_NOTE:_** can provide api key here in podman run --env TAVILY_SEARCH_API_KEY=$TAVILY_SEARCH_API_KEY, by adding this line,  line 27 in tool_websearch_clean.py dont need specify provider_data = {"tavily_search_api_key": tavily_search_api_key} e.g. 
+```
+podman run --privileged -it \  
+  -p ${LLAMA_STACK_PORT}:${LLAMA_STACK_PORT} \
+  -v ~/.llama:/root/.llama \
+  --env INFERENCE_MODEL=${INFERENCE_MODEL} \
+  --env OLLAMA_URL=http://host.docker.internal:11434 \
+  llamastack/distribution-ollama \
+  --port ${LLAMA_STACK_PORT} \
+  --env TAVILY_SEARCH_API_KEY=${TAVILY_SEARCH_API_KEY} \
+  --env WOLFRAM_ALPHA_API_KEY=${WOLFRAM_ALPHA_API_KEY}
+```
 
 or run
 `llama stack run --image-type conda ~/vscode/llama-stack/llama_stack/templates/ollama/run.yaml`
