@@ -15,6 +15,8 @@ export INFERENCE_MODEL="meta-llama/Llama-3.2-3B-Instruct"
 export LLAMA_STACK_PORT=8321
 mkdir -p ~/.llama
 ``````
+pull the latest ollama distribution by run `podman pull docker.io/llamastack/distribution-ollama`
+
 then start server by run
 ```
 podman run --privileged -it \
@@ -41,7 +43,7 @@ conda activate stack-client
 pip install llama-stack-client
 pip install python-dotenv
 ```
-> **_NOTE:_** code should work with 0.1.6. You can check current version by `pip show llama_stack_client`. use `pip install --upgrade llama_stack_client` to update to latest version. git repo for this is > https://github.com/meta-llama/llama-stack-client-python
+> **_NOTE:_** code should work with 0.1.7 and 0.1.8. You can check current version by `pip show llama_stack_client`. use `pip install --upgrade llama_stack_client` to update to latest version. git repo for this is > https://github.com/meta-llama/llama-stack-client-python
 
 next testing if it is configed properly
 ```
