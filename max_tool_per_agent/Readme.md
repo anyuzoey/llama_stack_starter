@@ -13,7 +13,8 @@ The core goal is to evaluate **how many tools a model can handle** before its to
 - ** (Guess) Model memory/attention limits:** Evidence suggests models may prioritize recent tool definitions or fail to recall earlier tools past a certain input size.
 
 ## 💡 Key Insights So Far
-
+- (update 26 Mar) rule out temperature. 
+- (update 24 Mar), 3B model last week consistently give 24 max tool. but this week for v0.1.8, it give 11, 18, 23 max tool for 3 different run. suspect temperature related param were changed for 3B model. 8b model to be tested if it follow same change.
 - LLaMA-8B can handle around **21 tools** before misidentifying the correct one.
 - **Extending tool descriptions** reduced that number to **18**, suggesting performance is bound by docstring.
 - **Extending tool name** reduced that number further to **17**, suggesting performance is bound by tool name.
@@ -23,7 +24,6 @@ The core goal is to evaluate **how many tools a model can handle** before its to
   - Or, after exceeding a threshold, **fail to abstract and match** any tools, even among the first few.
 - Even when inference still returns a response, the selected tool may be incorrect or invalid.
 - **Local vs. cluster-hosted models** (e.g., on NERC) behave differently—even for identical 3B models—likely due to variations in runtime or configuration (e.g., token limit in VLLM's `run.yaml`).
-- (update 24 Mar), 3B model last week consistently give 24 max tool. but this week for v0.1.8, it give 11, 18, 23 max tool for 3 different run. suspect temperature related param were changed for 3B model. 8b model to be tested if it follow same change.
 
 ## 📊 Sample Results
 
@@ -40,7 +40,7 @@ More results in the `experiment_logs` directory.
 
 ## 📁 Structure
 
-- `faketool.ipynb`: Automates multi-run tool testing.
+- `maxtool.ipynb`: Automates multi-run tool testing.
 - `experiment_logs/`: Contains CSV logs for each model run.
 - `count_token.ipynb`: try count tool set tokens.
 - `README.md`: This document.
@@ -53,3 +53,8 @@ More results in the `experiment_logs` directory.
 - Compare local vs. hosted model behavior in a controlled setting.
 
 
+todos
+how many 5 param tools, 10 param tools.
+similar tools how that affect performance.
+
+50 tokens sufficient to describe a tool. 
