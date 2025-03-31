@@ -15,7 +15,7 @@ print(f"Model: {inference_model}")
 
 client =  LlamaStackClient(
         base_url=f"http://localhost:{port}" if environment=="local" else endpoint,
-        provider_data = {"tavily_search_api_key": tavily_search_api_key}
+        # provider_data = {"tavily_search_api_key": tavily_search_api_key}
 )
 
 agent = Agent(
@@ -31,8 +31,7 @@ agent = Agent(
 )
 
 user_prompts = [
-    "Hello",
-    "How US performed in the olympics?",
+    "How did the USA perform in the last Olympics?",
 ]
 
 session_id = agent.create_session("test-session")

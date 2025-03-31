@@ -26,7 +26,7 @@ agent = Agent(
 )
 
 user_prompts = [
-    "solve x^2 + 2x + 1 = 0",
+    "solve x^2 + 2x + 1 = 0 using wolfram alpha",
 ]
 
 session_id = agent.create_session("test-session")
