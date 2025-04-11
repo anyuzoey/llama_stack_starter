@@ -1,32 +1,85 @@
-# This is my attempt to llama-stack quick start
-please follow more detail by "https://llama-stack.readthedocs.io/en/latest/getting_started/index.html"
+# Llama Stack Starter Project
 
-## Prerequisite
-Ollama
-Podman
+This project demonstrates various capabilities of the Llama Stack, including RAG (Retrieval-Augmented Generation), web search, and Wolfram Alpha integration. It serves as a practical implementation guide for using the Llama Stack framework.
 
-## Steps
-### 1. Start Ollama
-`ollama run llama3.2:3b-instruct-fp16 --keepalive 60m`
-or `ollama run llama3.1:8b-instruct-fp16 --keepalive 60m` 
-### 2. Start up the Llama Stack server  
-open terminal write
-``````
-export INFERENCE_MODEL="meta-llama/Llama-3.2-3B-Instruct"
+For more detailed documentation, please refer to:
+- [Llama Stack Official Documentation](https://llama-stack.readthedocs.io/en/latest/getting_started/index.html)
+- [Llama Stack Client Python Repository](https://github.com/meta-llama/llama-stack-client-python)
+
+## Prerequisites
+- Ollama
+- Podman
+- Python 3.10+ (Tested with Python 3.10)
+- Conda (recommended)
+
+## Project Structure
+```
+.
+├── .env                    # Environment variables configuration
+├── .env.example           # Example environment variables
+├── .gitignore             # Git ignore rules
+├── README.md              # This documentation
+├── example_rag.py         # RAG implementation example
+├── example_python_sdk.py  # Basic Python SDK usage example
+├── tool_websearch_clean.py # Web search agent implementation
+├── tool_wolframAlpha.py   # Wolfram Alpha integration example
+├── documents/             # Directory for RAG documents
+└── test/                  # Test cases and examples
+```
+
+## Environment Variables
+The following environment variables are required in your `.env` file:
+```bash
+INFERENCE_MODEL="meta-llama/Llama-3.2-3B-Instruct"  # or "meta-llama/Llama-3.1-8B-Instruct"
+LLAMA_STACK_PORT=8321
+LLAMA_STACK_ENDPOINT="http://localhost:8321"  # or your custom endpoint
+TAVILY_SEARCH_API_KEY="your_tavily_api_key"   # Required for web search
+WOLFRAM_ALPHA_API_KEY="your_wolfram_api_key"  # Required for Wolfram Alpha integration
+```
+
+## Setup Instructions
+
+### 1. Environment Setup
+1. Create a new conda environment:
+```bash
+yes | conda create -n stack-client python=3.10
+conda activate stack-client
+```
+
+2. Install required packages:
+```bash
+pip install llama-stack-client
+pip install python-dotenv
+```
+
+3. Copy `.env.example` to `.env` and fill in your API keys:
+```bash
+cp .env.example .env
+```
+
+### 2. Start Ollama
+Run one of the following commands:
+```bash
+ollama run llama3.2:3b-instruct-fp16 --keepalive 60m
+# or
+ollama run llama3.1:8b-instruct-fp16 --keepalive 60m
+```
+
+### 3. Start Llama Stack Server
+1. Set environment variables:
+```bash
+export INFERENCE_MODEL="meta-llama/Llama-3.2-3B-Instruct"  # or "meta-llama/Llama-3.1-8B-Instruct"
 export LLAMA_STACK_PORT=8321
 mkdir -p ~/.llama
-``````
-or 
-```
-export INFERENCE_MODEL="meta-llama/Llama-3.1-8B-Instruct"                               
-export LLAMA_STACK_PORT=8321
-mkdir -p ~/.llama
 ```
 
-pull the latest ollama distribution by run `podman pull docker.io/llamastack/distribution-ollama`
-
-then start server by run
+2. Pull the latest Ollama distribution:
+```bash
+podman pull docker.io/llamastack/distribution-ollama
 ```
+
+3. Run the Ollama distribution:
+```bash
 podman run --privileged -it \
   -p ${LLAMA_STACK_PORT}:${LLAMA_STACK_PORT} \
   -v ~/.llama:/root/.llama \
@@ -35,63 +88,88 @@ podman run --privileged -it \
   llamastack/distribution-ollama \
   --port ${LLAMA_STACK_PORT}
 ```
-> **_NOTE:_** can provide api key here in podman run --env TAVILY_SEARCH_API_KEY=$TAVILY_SEARCH_API_KEY, by adding this line,  line 27 in tool_websearch_clean.py dont need specify provider_data = {"tavily_search_api_key": tavily_search_api_key} e.g. 
-```
-podman run --privileged -it \  
+
+> **Note:** You can add API keys to the podman run command:
+```bash
+podman run --privileged -it \
   -p ${LLAMA_STACK_PORT}:${LLAMA_STACK_PORT} \
   -v ~/.llama:/root/.llama \
   --env INFERENCE_MODEL=${INFERENCE_MODEL} \
   --env OLLAMA_URL=http://host.docker.internal:11434 \
-  llamastack/distribution-ollama \
-  --port ${LLAMA_STACK_PORT} \
   --env TAVILY_SEARCH_API_KEY=${TAVILY_SEARCH_API_KEY} \
-  --env WOLFRAM_ALPHA_API_KEY=${WOLFRAM_ALPHA_API_KEY}
+  --env WOLFRAM_ALPHA_API_KEY=${WOLFRAM_ALPHA_API_KEY} \
+  llamastack/distribution-ollama \
+  --port ${LLAMA_STACK_PORT}
 ```
 
-or run
-`llama stack run --image-type conda ~/vscode/llama-stack/llama_stack/templates/ollama/run.yaml`
-
-> **_NOTE:_** check this for latest ollama distribution https://hub.docker.com/r/llamastack/distribution-ollama
-
-### 3. installing the llama stack client cli and sdk
-run following
+> **Alternative Method:** You can also run Llama Stack using the following command:
+```bash
+llama stack run --image-type conda ~/vscode/llama-stack/llama_stack/templates/ollama/run.yaml
 ```
-yes | conda create -n stack-client python=3.10
-conda activate stack-client
 
-pip install llama-stack-client
-pip install python-dotenv
+### 4. Configure Llama Stack Client
+```bash
+llama-stack-client configure --endpoint ${LLAMA_STACK_ENDPOINT}
 ```
-> **_NOTE:_** code should work with 0.1.7 and 0.1.8. You can check current version by `pip show llama_stack_client`. use `pip install --upgrade llama_stack_client` to update to latest version. git repo for this is > https://github.com/meta-llama/llama-stack-client-python
-
-next testing if it is configed properly
-```
-llama-stack-client configure --endpoint http://localhost:$LLAMA_STACK_PORT
-```
-expect output
+Expected output:
 ```
 > Enter the API key (leave empty if no key is needed):
 Done! You can now use the Llama Stack Client CLI with endpoint http://localhost:8321
 ```
-next run `llama-stack-client models list`
-expect to see a list of models you have
 
-next test by giving a user message to it, run
+Next, verify the configuration by listing available models:
+```bash
+llama-stack-client models list
 ```
+You should see a list of available models.
+
+Test the configuration with a simple message:
+```bash
 llama-stack-client \
   inference chat-completion \
   --message "hello, what model are you?"
 ```
-expect to see llm's outputs
+You should see the LLM's response to your message.
 
-### 4. Run the inference example in quick start example.
-I slightly modified it with .env file added.
-simplely run `¸` you will see llama's text output about coding haiku
+## Available Examples
 
-### 5. Run the first RAG agent example
-same, run `python example_rag.py` 
-you will see model output about they searched the rag file and give summary about it.
+### 1. Basic Python SDK Example
+```bash
+python example_python_sdk.py
+```
+This demonstrates basic interaction with the Llama Stack using the Python SDK.
 
-### 6. Run other agent examples
-Run the script:
-`python tool_websearch.py`
+### 2. RAG Implementation
+```bash
+python example_rag.py
+```
+This example shows how to implement Retrieval-Augmented Generation using the Llama Stack.
+
+### 3. Web Search Agent
+```bash
+python tool_websearch_clean.py
+```
+A web search agent implementation that uses Tavily Search API to fetch current information.
+
+### 4. Wolfram Alpha Integration
+```bash
+python tool_wolframAlpha.py
+```
+An example of integrating Wolfram Alpha for mathematical computations and data analysis.
+
+## Additional Notes
+- Make sure to have the required API keys in your `.env` file:
+  - `TAVILY_SEARCH_API_KEY` for web search functionality
+  - `WOLFRAM_ALPHA_API_KEY` for Wolfram Alpha integration
+- The project uses environment variables for configuration, which can be set in the `.env` file
+- For the latest Ollama distribution, check: https://hub.docker.com/r/llamastack/distribution-ollama
+- The code has been tested with llama-stack-client version 0.2.1
+- To update llama-stack-client to the latest version:
+  ```bash
+  pip install --upgrade llama-stack-client
+  ```
+- You can check your current llama-stack-client version with:
+  ```bash
+  pip show llama-stack-client
+  ```
+- The test directory contains additional examples and test cases for reference
