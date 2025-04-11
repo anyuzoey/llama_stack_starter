@@ -15,7 +15,7 @@ print(f"Model: {inference_model}")
 
 client =  LlamaStackClient(
         base_url=f"http://localhost:{port}" if environment=="local" else endpoint,
-        # provider_data = {"tavily_search_api_key": tavily_search_api_key}
+        provider_data = {"tavily_search_api_key": tavily_search_api_key}
 )
 
 agent = Agent(
@@ -28,6 +28,7 @@ agent = Agent(
         "name the tool called."
     ),
     tools=["builtin::websearch"],
+    sampling_params={"max_tokens":4096}
 )
 
 user_prompts = [
