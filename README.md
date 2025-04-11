@@ -15,7 +15,6 @@ For more detailed documentation, please refer to:
 ## Project Structure
 ```
 .
-├── .env                    # Environment variables configuration
 ├── .env.example           # Example environment variables
 ├── .gitignore             # Git ignore rules
 ├── README.md              # This documentation
@@ -23,8 +22,7 @@ For more detailed documentation, please refer to:
 ├── example_python_sdk.py  # Basic Python SDK usage example
 ├── tool_websearch_clean.py # Web search agent implementation
 ├── tool_wolframAlpha.py   # Wolfram Alpha integration example
-├── documents/             # Directory for RAG documents
-└── test/                  # Test cases and examples
+└── documents/             # Directory for RAG documents
 ```
 
 ## Environment Variables
